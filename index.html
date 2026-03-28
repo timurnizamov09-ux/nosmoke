@@ -4,23 +4,71 @@
   <meta charset="UTF-8">
   <title>Таймер</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 50px; }
-    button { padding: 10px 20px; font-size: 16px; }
-    #timer { font-size: 28px; margin-top: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+    }
+
+    .container {
+      background: rgba(255,255,255,0.1);
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 { margin-bottom: 20px; }
+
+    #timer {
+      font-size: 32px;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .start { background: #4CAF50; color: white; }
+    .reset { background: #f44336; color: white; }
+
+    button:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
 
-<h1>Персональный таймер</h1>
-<button onclick="startTimer()">Старт</button>
-<div id="timer">Нажми старт</div>
+<div class="container">
+  <h1>⏱ Персональный таймер</h1>
+  <div id="timer">Нажми старт</div>
+  <button class="start" onclick="startTimer()">Старт</button>
+  <button class="reset" onclick="resetTimer()">Сброс</button>
+</div>
 
 <script>
 function startTimer() {
   if (!localStorage.getItem('startTime')) {
     localStorage.setItem('startTime', Date.now().toString());
   }
-  updateTimer(); // сразу запускаем отображение
+  updateTimer();
+}
+
+function resetTimer() {
+  localStorage.removeItem('startTime');
+  document.getElementById('timer').innerText = 'Сброшено';
 }
 
 function updateTimer() {
@@ -30,18 +78,16 @@ function updateTimer() {
   const now = Date.now();
   const diff = now - startTime;
 
+  const seconds = Math.floor(diff / 1000) % 60;
   const minutes = Math.floor(diff / (1000 * 60)) % 60;
   const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   document.getElementById('timer').innerText =
-    `${days} дн ${hours} ч ${minutes} мин`;
+    `${days} дн ${hours} ч ${minutes} мин ${seconds} сек`;
 }
 
-// обновляем каждую секунду
 setInterval(updateTimer, 1000);
-
-// при загрузке страницы сразу показываем таймер
 updateTimer();
 </script>
 
