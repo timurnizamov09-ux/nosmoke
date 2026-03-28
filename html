@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Таймер</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #timer { font-size: 28px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Персональный таймер</h1>
+<button onclick="startTimer()">Старт</button>
+<div id="timer">00 дн 00 ч 00 мин</div>
+
+<script>
+// === СОХРАНЕНИЕ ТАЙМЕРА ===
+function startTimer() {
+  if (!localStorage.getItem('startTime')) {
+    localStorage.setItem('startTime', Date.now());
+  }
+}
+
+function updateTimer() {
+  const startTime = localStorage.getItem('startTime');
+  if (!startTime) return;
+
+  const now = Date.now();
+  const diff = now - startTime;
+
+  const minutes = Math.floor(diff / (1000 * 60)) % 60;
+  const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  document.getElementById('timer').innerText =
+    `${days} дн ${hours} ч ${minutes} мин`;
+}
+
+setInterval(updateTimer, 1000);
+</script>
+
+</body>
+</html>
