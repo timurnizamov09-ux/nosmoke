@@ -13,18 +13,18 @@
 
 <h1>Персональный таймер</h1>
 <button onclick="startTimer()">Старт</button>
-<div id="timer">00 дн 00 ч 00 мин</div>
+<div id="timer">Нажми старт</div>
 
 <script>
-// === СОХРАНЕНИЕ ТАЙМЕРА ===
 function startTimer() {
   if (!localStorage.getItem('startTime')) {
-    localStorage.setItem('startTime', Date.now());
+    localStorage.setItem('startTime', Date.now().toString());
   }
+  updateTimer(); // сразу запускаем отображение
 }
 
 function updateTimer() {
-  const startTime = localStorage.getItem('startTime');
+  const startTime = parseInt(localStorage.getItem('startTime'));
   if (!startTime) return;
 
   const now = Date.now();
@@ -38,7 +38,11 @@ function updateTimer() {
     `${days} дн ${hours} ч ${minutes} мин`;
 }
 
+// обновляем каждую секунду
 setInterval(updateTimer, 1000);
+
+// при загрузке страницы сразу показываем таймер
+updateTimer();
 </script>
 
 </body>
